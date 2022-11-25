@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+    @{
+        ViewData["Title"] = "Login";
+
+    }
+    <title>Login</title>
+    <style>
+        body {
+            background: #666
+        }
+
+
+        .hoverable {
+            background-color: rgba(75, 125, 255, 0.8);
+            cursor: pointer;
+            transition: background-color 1s ease-out 100ms
+        }
+
+            .hoverable:hover {
+                background-color: #ff6a00;
+                cursor: pointer;
+            }
+    </style>
+</head>
+
+<body>
+    @{
+        DateTime today = DateTime.Today;
+        DateTime todayTwo = DateTime.Today;
+        today = today.AddHours(17);
+        todayTwo = todayTwo.AddHours(18);
+        DateTime newdate = today;
+        bool created = false;
+
+
+
+    }
+
+
+    @if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+        </script>
+
+
+    }
+
+
+
+
+
+
+    <div class="container-fluid">
+        <table border="1" style="width: 100%;" class="table table-sm table-dark">
+            <colgroup>
+                <col span="1" style="width: 8%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+                <col span="1" style="width: 7%;">
+            </colgroup>
+
+
+
+            @for (var i = 16; i < 21; i++)
+            {
+                <tr>
+                    @for (var j = 0; j < 11; j++)
+                    {
+                        newdate = today.AddDays(j - 1);
+                        newdate = newdate.AddHours(i - 16);
+                        todayTwo = today.AddHours(i - 15);
+                        string DynamicId = ((i - 16) + j * 10).ToString();
+
+
+                        //dynamic id
+                        @if (i == 16)
+                        {
+
+                            @if (j == 0)
+                            {
+                                <td id="@DynamicId">časy</td>
+                            }
+                            else
+                            {
+
+                                <td id="@DynamicId">@newdate.ToShortDateString()</td>
+
+
+                            }
+
+                        }
+                        else
+                        {
+                            //datetime
+                            @if (j == 0)
+                            {
+
+                                <td id="@DynamicId">
+
+                                    @newdate.ToShortTimeString()-@todayTwo.ToShortTimeString()
+                                </td>
+
+
+                            }
+                            else
+                            {
+                                created = false;
+                                foreach (var training in ViewBag.trainings)
+                                {
+                                    if (training.Date.Day == newdate.Day && training.Date.Hour == newdate.Hour)
+                                    {
+
+                                        created = true;
+                                        <td id="@DynamicId" style="text-align:center" class="hoverable" onclick="clickedTableData(this) ">
+                                            @training.Name <br>
+                                            @training.Registred
+                                            /@training.Capacity
+                                        </td>
+                                        <script>
+                                            var obj = JSON.stringify({
+                                                id: '@training.Id', name: '@training.Name', count: '@training.Registred',
+                                                capacity: '@training.Capacity', datetime: '@training.Date'
+                                            });
+                                            sessionStorage.setItem('@DynamicId', obj);
+                                            console.log(sessionStorage.getItem('@DynamicId'));
+                                        </script>
+
+                                    }
+                                }
+                                if (!created)
+                                {
+
+                                    <td id="@DynamicId"> </td>
+                                }
+
+                            }
+
+                        }
+                    }
+
+                </tr>
+            }
+
+        </table>
+    </div>
+
+
+
+
+
+
+    <form method="post" action="@Url.Action("/registerToTraining", "HomeController")" name="registerToTraining" data="mydata" id="registerToTraining" class="container-fluid ">
+
+
+        <div class="d-flex align-items-center justify-content-center">
+            <div class="col col-xs-10 formgroup">
+                <label asp-for="Trening " id="trainingid">trening: </label>
+
+            </div>
+
+
+            <input asp-for="UID" class="form-control" type="hidden" name="UID" id="UID" />
+            <input asp-for="TID" class="form-control" type="hidden" name="TID" id="TID" />
+            <div class="col col-xs-10">
+
+                <button type="submit" class="btn btn-primary" id="submitbutton" disabled>Confirm identity</button>
+            </div>
+
+        </div>
+    </form>
+
+
+
+    <script>
+
+
+
+
+        function clickedTableData(element) {
+
+            const JsonItem = JSON.parse(sessionStorage.getItem((element).id));
+            var elid = (element).id;
+
+
+            sessionStorage.setItem("TID", JsonItem["id"]);
+            if (sessionStorage.getItem("clicked") != null) {
+                document.getElementById(sessionStorage.getItem("clicked")).style.backgroundColor = "rgba(75, 125, 255, 0.8)";
+            }
+            document.getElementById(elid).style.backgroundColor = "#ff6a00";
+            sessionStorage.setItem("clicked", elid);
+
+            var name = JsonItem["name"];
+            var time = JsonItem["datetime"];
+            document.getElementById("trainingid").innerHTML = name +" "+ time;
+
+            document.getElementById("UID").value = sessionStorage.getItem("ID");
+            document.getElementById("TID").value = sessionStorage.getItem("TID");
+            if (sessionStorage.getItem("ID") != null) {
+                document.getElementById("submitbutton").disabled = false;
+            }
+
+
+
+        }
+    </script>
+
+
+</body>
+
+</html>

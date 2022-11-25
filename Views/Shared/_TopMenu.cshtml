@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width = device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+
+    
+
+</head>
+
+
+
+
+<body>
+
+
+
+
+    <nav class="navbar navbar-white bg-dark text=white navbar-expand-lg">
+
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link fa fa-home" href="/home">Domov </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fa " href="/trainings">Treningi</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fa" href="/couches">Tréreni</a>
+            </li>
+
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0">
+            <a id="id" class="mr-4 fa fa-user-circle" href="/user/1"></a>
+            <a class="nav-link fa" href="/login" id="login">Login </a>
+            <a type="button" class="btn btn-outline-primary fa" href="/register" id="register">Registracia</a>
+            <a type="button" class="btn btn-outline-primary fa" href="/home" id="Logout" onclick="LogOut()">Odhlasenie</a>
+
+            
+        </form>
+
+
+
+    </nav>
+    <div>
+
+
+
+        @RenderBody()
+    </div>
+
+
+
+    <script>
+        if (sessionStorage.getItem('ID') == null) {
+            document.getElementById('login').style.display = '';
+            document.getElementById('register').style.display = '';
+            document.getElementById('Logout').style.display = 'none';
+            document.getElementById('id').style.display = 'none';
+        } else {
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('register').style.display = 'none';
+            document.getElementById('Logout').style.display = '';
+            document.getElementById('id').style.display = '';
+            document.getElementById('id').innerHTML =  sessionStorage.getItem('Name');
+        }
+        function LogOut() {
+            sessionStorage.removeItem('ID');
+            sessionStorage.removeItem('Name');
+            sessionStorage.removeItem('clicked');
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+
+
+
+

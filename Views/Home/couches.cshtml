@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    
+
+
+
+
+
+    @{
+        ViewData["Title"] = "Login";
+
+    }
+    <title>Login</title>
+    <style>
+        body {
+            background: #666
+        }
+
+
+        .hoverable {
+            color: rgba(75, 125, 255, 1);
+            cursor: pointer;
+            transition: color 1s ease-out 100ms
+        }
+
+            .hoverable:hover {
+                color: #ff6a00;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
+    <div>
+        <ul>
+        @foreach (var item in ViewBag.couches)
+            {
+                <li class="hoverable">@item.Name   @item.Email    @item.Description</li>
+            }
+        </ul>
+    </div>
+
+</body>

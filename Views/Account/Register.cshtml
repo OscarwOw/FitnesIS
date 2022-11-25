@@ -1,0 +1,108 @@
+﻿@model Beckend.DataLayer.DTO.UserCreateDTO
+
+@{
+    ViewBag.Title = "User Registration";
+}
+
+
+
+
+<body style="background: #666">
+
+
+    <div class="container-fluid" bg-dark text-white>
+        <div class="row">
+
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4  mt-10 ">
+
+                <h1>User Registration</h1>
+                <form method="post" action="@Url.Action("/register", "AccountController")" name="register">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="UserName ">UserName: </label>
+                        <input asp-for="UserName" class="form-control" type="text" id="UserName" name="UserName" onkeyup="manage()" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email ">Email: </label>
+                        <input asp-for="Email" class="form-control" type="email" id="Email" name="Email" onkeyup="manage()" />
+
+
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password ">Password: </label>
+                        <input asp-for="Password" class="form-control" type="password" id="Password" name="Password" onkeyup="manage()" />
+
+
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword ">Confirm Password: </label>
+                        <input asp-for="ConfirmPassword" class="form-control" type="password" id="ConfirmPassword" name="ConfirmPassword" onkeyup="manage()" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber ">PhoneNumber: </label>
+                        <input asp-for="PhoneNumber" class="form-control" type="tel" id="PhoneNumber" name="PhoneNumber" onkeyup="manage()" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Birthdate ">Birthdate: </label>
+                        <input asp-for="Birthdate" class="form-control" type="date" id="Birthdate" name="Birthdate" onkeyup="manage()" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Name ">Name: </label>
+                        <input asp-for="Name" class="form-control" type="text" id="Name" name="Name" onkeyup="manage()" />
+
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary" value="Register" id="RegisterButton" disabled>Register</button>
+                </form>
+
+                @if (ViewBag.Message != null)
+                {
+                    <script type="text/javascript">
+
+                        window.onload = function () {
+                            alert("@ViewBag.Message");
+                        };
+                    </script>
+
+                }
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script>
+        function manage() {
+            var bt = document.getElementById('RegisterButton');
+            var UserName = document.getElementById('UserName');
+            var Email = document.getElementById('Email');
+            var Password = document.getElementById('Password');
+            var ConfirmPassword = document.getElementById('ConfirmPassword');
+            var PhoneNumber = document.getElementById('PhoneNumber');
+            var Birthdate = document.getElementById('Birthdate');
+            var Name = document.getElementById('Name');
+            if (UserName.value == '' || Email.value == '' || Password.value == '' || ConfirmPassword.value == ''
+                || PhoneNumber.value == '' || Birthdate.value == '' || Name.value == '') {
+                bt.disabled = true;
+            }
+            else {
+                bt.disabled = false;
+            }
+        }
+    </script>
+
+</body>
+

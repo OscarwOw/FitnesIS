@@ -1,0 +1,258 @@
+﻿@model Beckend.DataLayer.DTO.UserCreateDTO
+
+@{
+    ViewBag.Title = "User Registration";
+}
+
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        body {
+            color: white;
+        }
+        input{
+            background-color: #777
+        }
+        .card-body {
+            background-color:rgba(41, 41, 41, 1);
+        }
+        .setcardbackground {
+            background-color: rgba(41, 41, 41, 1);
+        }
+        .hoverable {
+            background-color: rgba(41, 41, 41, 1);
+            cursor: pointer;
+            transition: background-color 1s ease-out 100ms;
+        }
+        .hoverable:hover {
+            background-color: #ff6a00;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body style="background: #666">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 ">
+                <div class="list-group ">
+                    <a href="#" class="list-group-item list-group-item-action Mybutton" onclick="UserInfo(this)" id="PrimaryButton">Change User information</a>
+                    <a href="#" class="list-group-item list-group-item-action Mybutton" onclick="RegistredTrainings(this)" id="btn2">registred trainings</a>
+
+
+
+                </div>
+            </div>
+            
+            <div class="col-md-9 setcardbackground" style="background-color :rgba(41, 41, 41, 1)">
+                <div class="card" style="background-color :rgba(41, 41, 41, 1)">
+                    <!--      please dont mind color :D -->
+                    <div class="card-body" id="Userinfo">
+                        <!--      ###############################################################  -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Your Profile</h4>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form method="post" action="@Url.Action("/updateprofile", "AccountController")" name="updateprofile" data="mydata" id="updateprofile">
+                                    <div class="form-group row">
+                                        <input asp-for="ID" class="form-control" type="hidden" name="ID" id="ID" />
+                                        <label for="name" class="col-4 col-form-label">First name</label>
+                                        <div class="col-8">
+                                            <input id="name" name="name" placeholder="First Name" class="form-control here" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="email" class="col-4 col-form-label">Email</label>
+                                        <div class="col-8">
+                                            <input id="email" name="email" placeholder="Email" class="form-control here" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="phonenumber" class="col-4 col-form-label">Phone number</label>
+                                        <div class="col-8">
+                                            <input id="phonenumber" name="website" placeholder="Phone number" class="form-control here" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="birthdate" class="col-4 col-form-label">Birthdate</label>
+                                        <div class="col-8">
+                                            <input id="birthdate" name="website" placeholder="Birthdate" class="form-control here" type="date">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <div class="offset-4 col-8">
+                                            <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div> <!--      ###############################################################  -->
+                    <div class="card-body" id="RT">
+
+
+
+                        <div class="row">
+                            <div class="col">
+                                <label style="font-weight:bold;">Tréning</label>
+                            </div>
+                            <div class="col">
+                                <label style="font-weight:bold;">Čas</label>
+                            </div>
+                            <div class="col">
+                                <label></label>
+                            </div>
+
+
+                        </div>
+                        <hr />
+                        @foreach (var training in ViewBag.nextTrainings)
+                        {
+                            <div id="@training.Id" class="row hoverable" onclick="clickedRowData(@training.Id)">
+                                <div class="col">
+                                    <label style="font-weight:bold;">@training.Name</label>
+                                </div>
+                                <div class="col">
+                                    <label style="font-weight:bold;">@training.Date</label>
+                                </div>
+                                <div class="col">
+
+                                </div>
+
+                            </div>
+                            <hr />
+                        }
+
+                        <div class="col">
+                            <form method="post" action="@Url.Action("/updateprofile", "AccountController")" name="updateprofile" data="mydata" id="updateprofile">
+                                <input asp-for="UID" class="form-control" type="hidden" name="UID" id="UID" />
+                                <input asp-for="TID" class="form-control" type="hidden" name="TID" id="TID" />
+
+                                <button type="submit" class="btn btn-primary" value="Login" id="RemoveButton" disabled>Ohlásiť</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+    
+
+
+    
+        
+
+   
+    
+
+
+
+
+
+    
+
+
+
+
+
+    <script>
+
+        document.getElementById("ID").value = sessionStorage.getItem("ID");
+        const getURIParts = (url) => {
+            const matches = url.match(/^(\w+?:\/\/)?([\w-\.]+(?=\/?))?:?(\d*)?([^:]*)/)
+            return {
+                pathname: matches ? matches[4] : ''
+            }
+        }
+
+        if (sessionStorage.ID == null) {
+            alert("You must be logged in");
+            window.location.href = "login";
+        }
+
+
+
+
+
+
+        if (sessionStorage.ID != parseInt(getURIParts(window.location.href).pathname.slice(6))) { //check if right user enters right profile
+            window.location.href = "/user/" + sessionStorage.ID;
+        }
+        document.getElementById("RT").style.display = "none";
+        document.getElementById("PrimaryButton").className += " active";
+        sessionStorage.removeItem("clicked");
+        sessionStorage.removeItem("TID");
+
+
+
+
+
+        function clickedRowData(id) {
+            
+            if (sessionStorage.getItem("clicked") != null) {
+                document.getElementById(sessionStorage.getItem("clicked")).style.backgroundColor = "rgba(41, 41, 41, 1)";
+            }
+            document.getElementById(id).style.backgroundColor = "#ff6a00";
+            sessionStorage.setItem("clicked", id);
+            document.getElementById("UID").value = sessionStorage.getItem("ID");
+            document.getElementById("TID").value = sessionStorage.getItem("clicked");
+            document.getElementById("RemoveButton").disabled = false;
+
+        }
+
+        function UserInfo(element) {
+            ChangeButtons((element));
+            document.getElementById("Userinfo").style.display = "";  //could be optimized but why bother
+            document.getElementById("RT").style.display = "none";
+
+            if (sessionStorage.getItem("clicked") != null) {//visual bug
+                document.getElementById(sessionStorage.getItem("clicked")).style.backgroundColor = "rgba(41, 41, 41, 1)";
+            }
+            sessionStorage.removeItem("clicked");
+            document.getElementById("UID").value = "";
+            document.getElementById("TID").value = "";
+            document.getElementById("ID").value = sessionStorage.getItem("ID");
+            document.getElementById("RemoveButton").disabled = true;
+        }
+        function RegistredTrainings(element) {
+            ChangeButtons((element));
+            document.getElementById("Userinfo").style.display = "none";
+            document.getElementById("RT").style.display = "";
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("phonenumber").value = "";
+            document.getElementById("birthdate").value = "";
+        }
+        function ChangeButtons(element) {
+            var btns = document.getElementsByClassName("Mybutton");
+
+
+
+            for (var i = 0; i < btns.length; i++) {
+
+                btns[i].className = btns[0].className.replace(" active", "");
+
+            }
+            (element).className += " active";
+
+        }
+
+    </script>
+
+
+
+
+</body>
+
